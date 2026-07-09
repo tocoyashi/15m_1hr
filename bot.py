@@ -152,7 +152,7 @@ def generate_summary(direction, strategy, df):
             "Place defensive stops above the setup zone; anticipate swift execution toward the nearest target."
         ])
 
-    summary = f"🚀 {structure_txt} {action_txt} {rsi_txt} {levels_txt}"
+    summary = f"{structure_txt} {action_txt} {rsi_txt} {levels_txt}"
     return summary
 
 def send_crypto_signal(coin_name, direction, strategy, entry, leverage, tp1, tp2, tp3, tp4, sl, summary_text):
@@ -165,7 +165,7 @@ def send_crypto_signal(coin_name, direction, strategy, entry, leverage, tp1, tp2
 
     arrow = "⇈" if direction.lower() == "long" else "⇊"
 
-    text = f"""◼️ Signal Strat: {strategy}
+    text = f"""📌 Signal Strat: {strategy}
 ➕ #{clean_name} {TIMEFRAME.upper()} | {TIMEFRAME_H1.upper()}
 ➕ {direction_text} Entry Zone: {zone_low} - {zone_high} {arrow}
 ➕ Leverage: {leverage}x
