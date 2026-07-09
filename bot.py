@@ -207,11 +207,11 @@ def analyze_and_trade():
             df_h1 = pd.DataFrame(ohlcv_h1, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
 
             # ========== فلتر الحجم ==========
-            prev_volume = df_15m['volume'].iloc[-2]
+            avg_volume = df_15m['volume'].tail(20).mean()
             current_volume = df_15m['volume'].iloc[-1]
 
-            if current_volume < prev_volume * 0.5:
-                print(f"Volume filter rejected {symbol}: current={current_volume:.0f} < 50% of prev={prev_volume:.0f}")
+            if current_volume < avg_volume * 0.3:
+                print(f"Volume filter rejected {symbol}: current={current_volume:.0f} < 30% of avg(20)={avg_volume:.0f}")
                 continue
 
             # ========== تحليل H1 (الاتجاه العام) ==========
