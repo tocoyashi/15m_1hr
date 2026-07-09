@@ -70,7 +70,7 @@ def generate_summary(direction, strategy, df):
         ])
 
     # الحدث المُفَعِّل (بدون أرقام)
-    if "EMA" in strategy:
+    if "Golden" in strategy:
         if direction == "LONG":
             action_txt = random.choice([
                 "A fast exponential crossover has triggered fresh buying interest.",
@@ -83,7 +83,7 @@ def generate_summary(direction, strategy, df):
                 "Short-term averages aligned bearishly, opening a momentum scalp window.",
                 "Price lost the fast average, signaling a shift in micro-structure."
             ])
-    elif "MACD" in strategy:
+    elif "Divergence" in strategy:
         if direction == "LONG":
             action_txt = random.choice([
                 "The momentum oscillator turned positive, confirming a bullish divergence.",
@@ -163,23 +163,25 @@ def send_crypto_signal(coin_name, direction, strategy, entry, leverage, tp1, tp2
     zone_low = round(entry * 0.9985, get_decimals(entry))
     zone_high = round(entry * 1.0015, get_decimals(entry))
 
-    text = f"""✖️ Signal Type: {strategy}
-✖️ #{clean_name} {TIMEFRAME.upper()} | {TIMEFRAME_H1.upper()}
-✖️ {direction_text} Entry Zone: {zone_low} - {zone_high}
-✖️ Leverage: {leverage}x
+    arrow = "⇈" if direction.lower() == "long" else "⇊"
 
-✖️ Strategy Details:
-✖️ TP 1: {tp1}
-✖️ TP 2: {tp2}
-✖️ TP 3: {tp3}
-✖️ TP 4: {tp4}
+    text = f"""◼️ Signal Strat: {strategy}
+➕ #{clean_name} {TIMEFRAME.upper()} | {TIMEFRAME_H1.upper()}
+➕ {direction_text} Entry Zone: {zone_low} - {zone_high} {arrow}
+➕ Leverage: {leverage}x
 
-🔺 Stop-Loss: {sl}
+📌 Strategy Details:
+➕ TP 1: {tp1}
+➕ TP 2: {tp2}
+➕ TP 3: {tp3}
+➕ TP 4: {tp4}
+
+🔻 Stop-Loss: {sl}
 🔻 After TP1 move SL to BE
 
 ———————————
 
-{summary_text}"""
+✂️ {summary_text}"""
 
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     payload = {"chat_id": CHANNEL_ID, "text": text, "disable_web_page_preview": True, "parse_mode": "HTML"}
@@ -249,7 +251,7 @@ def analyze_and_trade():
 
             # ✨ LONG Signals (H1 صاعد)
             if (ema_buy or macd_buy or bb_buy) and h1_trend_bullish:
-                strategy_name = "EMA Cross" if ema_buy else ("MACD Cross" if macd_buy else "BB Breakout")
+                strategy_name = "Golden Cross" if ema_buy else ("M Divergence" if macd_buy else "Breakout")
                 lev = "15" if ema_buy else ("25" if macd_buy else "20")
 
                 print(f"BUY on {symbol} via {strategy_name} ({lev}x) | H1 Confirmed!")
@@ -265,7 +267,7 @@ def analyze_and_trade():
 
             # ✨ SHORT Signals (H1 هابط)
             elif (ema_sell or macd_sell or bb_sell) and h1_trend_bearish:
-                strategy_name = "EMA Cross" if ema_sell else ("MACD Cross" if macd_sell else "BB Breakdown")
+                strategy_name = "Golden Cross" if ema_sell else ("M Divergence" if macd_sell else "Breakdown")
                 lev = "15" if ema_sell else ("25" if macd_sell else "20")
 
                 print(f"SELL on {symbol} via {strategy_name} ({lev}x) | H1 Confirmed!")
