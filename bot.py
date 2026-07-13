@@ -213,7 +213,7 @@ def analyze_and_trade():
             current_volume = df_15m['volume'].iloc[-1]
 
             if current_volume < avg_volume * 0.3:
-                print(f"Volume filter rejected {symbol}: current={current_volume:.0f} < 30% of avg(20)={avg_volume:.0f}")
+                print(f"Volume filter rejected {symbol}: current={current_volume:.0f} < 10% of avg(20)={avg_volume:.0f}")
                 continue
 
             # ========== تحليل H1 (الاتجاه العام) ==========
